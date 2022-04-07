@@ -1,4 +1,11 @@
 <?php
+/**
+ * PHP Variable Dump
+ *
+ * @author Chinmay G. Palekar [ChinmayP79]
+ * @copyright (C) 2022-forever, Chinmay G. Palekar [ChinmayP79]
+ * @license GPL-3.0
+**/
 
 /**
  * PHP Variable Dump Class
