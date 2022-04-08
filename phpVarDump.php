@@ -21,14 +21,14 @@ class phpVarDump
 	 *
 	 * @access private
 	 **/
-	private function php_var_dump(...$args)
+	private function php_var_dump(...$vars)
 	{
 		ini_set('xdebug.var_display_max_children', '-1');
 		ini_set('xdebug.var_display_max_data', '-1');
 		ini_set('xdebug.var_display_max_depth', '-1');
 
 		ob_start();
-		var_dump(...$args);
+		var_dump(...$vars);
 		$ob_content = ob_get_contents();
 		ob_end_clean();
 
@@ -44,11 +44,9 @@ class phpVarDump
 	 *
 	 * @access private
 	 **/
-	public function preformat(...$args)
+	public function preformat($dbg_msg, $dbg_fn_opt, ...$vars)
 	{
-		echo('<pre><code>');
-		$this->php_var_dump(...$args);
-		echo('</code></pre>');
+		echo('<pre><code>' . $this->php_var_dump(...$vars) . '</code></pre>');
 	}
 
 	/**
@@ -56,9 +54,9 @@ class phpVarDump
 	 *
 	 * @access private
 	 **/
-	public function file(...$args)
+	public function file($dbg_msg, $dbg_fn_opt, ...$vars)
 	{
-		$this->php_var_dump(...$args);
+		$this->php_var_dump(...$vars);
 	}
 
 	/**
@@ -66,9 +64,9 @@ class phpVarDump
 	 *
 	 * @access private
 	 **/
-	public function email(...$args)
+	public function email($dbg_msg, $dbg_fn_opt, ...$vars)
 	{
-		$this->php_var_dump(...$args);
+		$this->php_var_dump(...$vars);
 	}
 
 }
