@@ -44,7 +44,7 @@ class phpVarDump
 	 *
 	 * @access private
 	 **/
-	public function preformat($dbg_msg, $dbg_fn_opt, ...$vars)
+	public function preformat($options, ...$vars)
 	{
 		echo('<pre><code>' . $this->php_var_dump(...$vars) . '</code></pre>');
 	}
@@ -54,7 +54,7 @@ class phpVarDump
 	 *
 	 * @access private
 	 **/
-	public function file($dbg_msg, $dbg_fn_opt, ...$vars)
+	public function file($options, ...$vars)
 	{
 		$this->php_var_dump(...$vars);
 	}
@@ -64,7 +64,7 @@ class phpVarDump
 	 *
 	 * @access private
 	 **/
-	public function email($dbg_msg, $dbg_fn_opt, ...$vars)
+	public function email($options, ...$vars)
 	{
 		$this->php_var_dump(...$vars);
 	}
