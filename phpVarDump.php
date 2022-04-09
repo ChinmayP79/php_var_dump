@@ -13,30 +13,47 @@
 class phpVarDump
 {
 
+	/** @var string		New line */
+	private $nl = "";
+
 	/** @var string		Default Variable Dump Message */
 	public $default_var_dump_msg = 'Variable Dump';
 
 	/**
-	 * Xdebug INI Set
+	 * PHP Variable Dump
 	 *
 	 * @access private
 	 **/
 	private function php_var_dump(...$vars)
 	{
+		$dump = '';
+		$dbt = @debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)[2];
+		if (!empty($dbt))
+		{
+			$dump .= 'In '.$dbt['file'].':'.$dbt['line'].':';
+			$dump .= !empty($dbt['class']) ? $dbt['class'] : '';
+			$dump .= !empty($dbt['type']) ? $dbt['type'] : '';
+			$dump .= !empty($dbt['function']) ? $dbt['function'].':' : '';
+			$dump .= $this->nl;
+		}
+
 		ini_set('xdebug.var_display_max_children', '-1');
 		ini_set('xdebug.var_display_max_data', '-1');
 		ini_set('xdebug.var_display_max_depth', '-1');
 
 		ob_start();
-		var_dump(...$vars);
-		$ob_content = ob_get_contents();
+		var_dump(...$vars); $vd_line = __LINE__;
+		$dump .= ob_get_contents();
 		ob_end_clean();
 
 		ini_restore('xdebug.var_display_max_children');
 		ini_restore('xdebug.var_display_max_data');
 		ini_restore('xdebug.var_display_max_depth');
 
-		return $ob_content;
+		$vd_line = preg_quote(str_replace(__DIR__ . DIRECTORY_SEPARATOR,'',__FILE__) .':'. $vd_line);
+		$dump = preg_replace('/\<small\>(.*?)'.$vd_line.'\:\<\/small\>/','',$dump);
+
+		return $dump;
 	}
 
 	/**
@@ -44,8 +61,9 @@ class phpVarDump
 	 *
 	 * @access private
 	 **/
-	public function preformat($options, ...$vars)
+	public function preformat(...$vars)
 	{
+		$this->nl = "<br>";
 		echo('<pre><code>' . $this->php_var_dump(...$vars) . '</code></pre>');
 	}
 
@@ -54,8 +72,9 @@ class phpVarDump
 	 *
 	 * @access private
 	 **/
-	public function file($options, ...$vars)
+	public function file(...$vars)
 	{
+		$this->nl = "\n";
 		$this->php_var_dump(...$vars);
 	}
 
@@ -64,8 +83,9 @@ class phpVarDump
 	 *
 	 * @access private
 	 **/
-	public function email($options, ...$vars)
+	public function email(...$vars)
 	{
+		$this->nl = "<br>";
 		$this->php_var_dump(...$vars);
 	}
 
